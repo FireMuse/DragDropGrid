@@ -1,10 +1,10 @@
 # Drag Drop Grid (ddgrid.js)
 Drag Drop Grid is an HTML5 visual interface for data best presented and editable on a grid. There's a wide variety of uses for personal or business. It works for both desktop and mobile browsers.
 
-###Libraries
+### Libraries
 Konva [Link](https://konvajs.github.io/)
 
-###Examples
+### Examples
 [See Examples](https://firemuse.github.io/DragDropGrid/examples)
 
 
