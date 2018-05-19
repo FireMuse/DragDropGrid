@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Drag Drop Grid Examples</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+	<script src="https://cdn.rawgit.com/konvajs/konva/2.0.3/konva.min.js"></script>
+	<script src="ddgrid.js"></script>
+	<style>
+		.toggled {}
+	</style>
+</head>
+<body class="w3-container">
+<h1>Drag Drop Grid Examples</h1>
+<div id="Example1" class="w3-panel toggled w3-green">
+	<h3>Example 1 - Simple Tag Grid</h3>
+	The two main function calls that make the Drag Drop Grid work are <code class="w3-codespan">highlighted</code> in the sample code.<br>
+	<h4>ddGrid Constructor</h4>
+	Param 1: The ddGrid's constructor's first paramenter is the id of an empty div. This is where it will use KonvaJS to create a stage.<br>
+	Param 2: The overFlowMethod is a constant that tells it how to handle data tags that overflow the stage size.<br>
+	Param 3&4: The initial stage size is specified as width (x) and height (y) in pixels.<br>
+	Unless the overflowMethod is set to grow, the stage will be limited to that size and either slide (drag) or page with page controls.<br>
+	<h4>loadGrid</h4>
+	The loadGrid function takes two json objects as parameters, the settings and the data.<br>
+	Alternatively you may pass two json strings using <b>loadGridFromJSONString.</b><br>
+	While there are number of defaults to make this easy, there are some settings that must be configured to make a grid work.<br>
+	For a one-dimensional grid either the <b>columnField</b> or the <b>rowField</b> must be set to the field names.<br>
+	For two-dimensional grids, both <b>columnField</b> and <b>rowField</b> must be set.<br>
+	The <b>tagLabelField</b> is required for the main text on the tags.<br>
+	For an editable grid, the <b>gridEditMode</b> must be set to true. By default it is readonly and the drag is disabled.<br>
+	<div class="w3-code notranslate w3-text-black">
+	function showExample1() {<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;var gridSettings = {<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;columnField: "status",<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tagLabelField: "employee",<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tagLabelFloat: "middle",<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gridTitleText: "Employee Status",<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gridCellGrowth: dd_gridCellGrowthMethods.downOnly,<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gridEditMode: true<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;};<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;var testData = [<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{"employee":"Joseph","status":"AVAILABLE"},<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{"employee":"April","status":"VACATION"},<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{"employee":"George","status":"AVAILABLE"},<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{"employee":"Sarah","status":"AVAILABLE"},<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{"employee":"Arnold","status":"SICK"},<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{"employee":"Michael","status":"VACATION"}<br>		
+	&nbsp;&nbsp;&nbsp;&nbsp;];<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;<code class="w3-codespan">example1grid = new ddGrid("Example1Canvas",dd_overFlowMethods.grows,600,500);</code><br>
+	&nbsp;&nbsp;&nbsp;&nbsp;<code class="w3-codespan">example1grid.loadGrid(gridSettings,testData);</code><br>
+	}<br>
+	</div><br>
+	<button class="w3-button w3-blue" onclick="showExample1();">Run Example</button><br>
+	<br>
+</div>
+<div id='Example1Canvas' class="w3-border w3-border-black w3-border-16" style="width:600px;">
+</div><br>
+<div id="Example2" class="w3-panel toggled w3-green">
+	<h3>Example 2 - Deterministic Grid</h3>
+	In the previous example, all columns and rows were determined by the data itself. But what if no one was sick? The column would be missing.<br>
+	What's more, there's no control of the order of the columns or what the label should be for say a boolean status.<br>
+	The solution to both is to set the <b>columnValueLabelPairs</b> or <b>rowValueLabelPairs</b> depending on your layout.<br>
+	This example is for nightly chores. As such, we don't want anyone pawning off their chores.<br>
+	The solution is to use the <b>tagRowBound</b> or <b>tagColumnBound</b> setting to restrict the drag direction.<br>
+	Also demonstrated is the <b>dd_overFlowMethods.slides</b> setting which will slide the grid when dragging tags to the left or right side of the grid.
+	<h4>columnValueLabelPairs</h4>
+	This is an array of objects with <b>Value</b> and <b>Label</b> variables.
+	The <b>ColumnField</b> is still set to associate which field in our data is used to sort the tags.
+	<h4>tagRowBound</h4>
+	This is a boolean setting. If true, the tag drag movement is restricted to a horizontal direction.<br>
+	<div class="w3-code notranslate w3-text-black">
+	function showExample2() {<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;var testData = [<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{"chore":"Do the dishes","assignee":"Joseph","status":false},<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{"chore":"Take out trash","assignee":"Sarah","status":false},<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{"chore":"Feed the dog","assignee":"Sarah","status":false},<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{"chore":"Lock Up","assignee":"Arnold","status":false},<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{"chore":"Sweep the floor","assignee":"Arnold","status":false},<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{"chore":"Put food away","assignee":"Michael","status":false}<br>		
+	&nbsp;&nbsp;&nbsp;&nbsp;];<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;var columnSettings = [<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{Value:false,Label:"NOT DONE"},<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{Value:true,Label:"DONE"}<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;];<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;example2grid = new ddGrid("Example2Canvas",dd_overFlowMethods.slides,window.innerWidth - 50,500);<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;var gridSettings = {<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;columnField: "status",<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;columnValueLabelPairs: columnSettings,<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rowField: "assignee",<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tagRowBound: true,<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tagLabelField: "chore",<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tagLabelFloat: "middle",<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gridTitleText: "Nightly Chores",<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gridCellGrowth: dd_gridCellGrowthMethods.downOnly,<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gridEditMode: true<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;};<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;example2grid.loadGrid(gridSettings,testData);<br>
+	}<br>
+	</div><br>
+	<button class="w3-button w3-blue" onclick="showExample2();">Run Example</button><br>
+	<br>
+</div>
+<div id='Example2Canvas' class="w3-border w3-border-black w3-border-16 w3-rest" >
+</div><br>
+<div id="Example3" class="w3-panel toggled w3-green">
+	<h3>Example 3 - Legends</h3>
+	You can color code your tags based on any value using <b>colorLabelValuePairs</b>. Then you can show what those colors mean by displaying a legend using <b>showLegend</b>. Handy still is the use of a legend to create new tags by simply dragging the legend tag onto a grid.<br>
+	But you shouldn't be able to add tags if you can't delete them. Normally if you drag a tag off the grid it snaps back, but setting <b>gridDeleteOnDragOff</b> true will make it delete the tag instead.<br>
+	This example is for a school bus driver schedule. Note that someone called in sick. Put your floater Ryan onto the empty spot by dragging him off the legend.<br>
+	<h4>Legend and Tag Color Settings</h4>
+	<b>tagColorField</b> determines what field in your data drives the color.<br>
+	<b>colorLabelValuePairs</b> is an array of objects that associate <b>Color</b> with <b>Value</b> and determine the legend tag <b>Label</b>.<br>
+	<b>tagColorField</b> determines what field in your data drives the color.<br>
+	<b>showLegend</b> set to true will enable the legend.<br>
+	<b>showLegendCount</b> will make a counter appear on the legend tags. This will update as you add and remove tags.<br>
+	<b>legendTitle</b> allows you to change the label of the legend group. It defaults to LEGEND.<br>
+	<b>gridDeleteOnDragOff</b> set to true will make dragging a tag off the grid delete the tag rather than snap back in place.<br>
+	<div class="w3-code notranslate w3-text-black">
+	function showExample3() {<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;var testData = [<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{"day":1,"route":1,"driver":"Gunderson"},<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{"day":1,"route":2,"driver":"Sanchez"},<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{"day":1,"route":3,"driver":"Olivia"},<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{"day":1,"route":4,"driver":"Brown"},<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{"day":2,"route":2,"driver":"Gunderson"},<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{"day":2,"route":3,"driver":"Sanchez"},<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{"day":2,"route":4,"driver":"Olivia"},<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{"day":3,"route":1,"driver":"Brown"},<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{"day":3,"route":2,"driver":"Gunderson"},<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{"day":3,"route":3,"driver":"Sanchez"},<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{"day":3,"route":4,"driver":"Olivia"},<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{"day":4,"route":1,"driver":"Brown"},<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{"day":4,"route":2,"driver":"Ryan"},<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{"day":4,"route":3,"driver":"Gunderson"},<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{"day":4,"route":4,"driver":"Sanchez"},<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{"day":5,"route":1,"driver":"Olivia"},<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{"day":5,"route":2,"driver":"Brown"},<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{"day":5,"route":3,"driver":"Ryan"},<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{"day":5,"route":4,"driver":"Gunderson"}<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;];<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;var days = [<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{Value:1,Label:"Monday"},<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{Value:2,Label:"Tuesday"},<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{Value:3,Label:"Wednesday"},<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{Value:4,Label:"Thursday"},<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{Value:5,Label:"Friday"}<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;];<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;var routes = [<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{Value:1,Label:"KINGS RD"},<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{Value:2,Label:"LAKESHORE"},<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{Value:3,Label:"WOODLAND"},<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{Value:4,Label:"MAIN ST"}<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;];<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;var drivers = [<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{Value:"Gunderson",Label:"Gunderson",Color:"green"},<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{Value:"Sanchez",Label:"Sanchez",Color:"blue"},<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{Value:"Olivia",Label:"Olivia",Color:"purple"},<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{Value:"Brown",Label:"Brown",Color:"brown"},<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{Value:"Ryan",Label:"Ryan",Color:"orange"}<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;];<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;example3grid = new ddGrid("Example3Canvas",dd_overFlowMethods.grows,1200,500);<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;var gridSettings = {<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;columnField: "day",<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;columnValueLabelPairs: days,<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rowField: "route",<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rowValueLabelPairs: routes,<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tagColorField: "driver",<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;colorLabelValuePairs: drivers,<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tagLabelField: "driver",<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tagLabelFloat: "middle",<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;showLegend: true,<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;legendTitle: "DRIVERS",<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;showLegendCount: true,<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gridDeleteOnDragOff: true,<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gridTitleText: "SCHOOL BUS SCHEDULE",<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gridCellGrowth: dd_gridCellGrowthMethods.downOnly,<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gridEditMode: true<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;};<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;example3grid.loadGrid(gridSettings,testData);<br>
+	}<br>
+	</div><br>
+	<button class="w3-button w3-blue" onclick="showExample3();">Run Example</button><br>
+	<br>
+</div>
+<div id='Example3Canvas' class="w3-border w3-border-black w3-border-16 w3-rest">
+</div>
+<div id="Example4" class="w3-panel toggled w3-green">
+	<h3>Example 4 - DB Webcall Integration and Paging</h3>
+	All of the data manipulated by Drag Drop Grid is maintained in an array property called <b>tagData</b> a reference copy of the data you pass in on the <b>loadGrid</b> function.<br>
+	You could certainly access this data directly to monitor the changes, then pass that data up to your server to process, but it would be a better experience to process only the data that changed as it changes.<br>
+	If <b>postEachGridEdit</b> is TRUE, you are telling Drag Drop Grid to make callbacks for each edit, insert, delete on the grid.<br>
+	The main function you must implement to handle most callbacks is the <b>gridEditFunction</b>.<br>
+	This function could be used to negate the change, further adjust the data, trigger an event or record the change with a webcall to a server component and database.<br>
+	Assign the ddGrid.gridEditFunction your own implementation of the function. The parameters passed to it provide sufficient information to process the edit.<br>
+	Initiate a non-blocking, asynchronous webcall within your function to your server to post the change.<br>
+	Your function must return TRUE or a new TagDataAray Index number to accept the edit, as returning FALSE is a way to block the edit to enforce a custom rule.<br>
+	Also demonstrated is the paging overflow method using the <b>dd_overFlowMethods.pages</b> option when creating the grid. Note the page control on top right.<br>
+	<h4><i>int</i> gridEditFunction(tag,gridAction,groupColumnRowID,dataChanges)</h4>
+	<b>tag</b> is a reference to the ddGrid Konva tag object. Metadata of the tag is accessed via the attrs property. <b>tag.attrs.id</b> is the index to the tagData array.<br>
+	<b>gridAction</b> will be one of the dd_gridActions constants, either "edit", "delete", "insert", "update", "duplicate", "editColumn", "deleteColumn" or "insertColumn".<br>
+	<b>groupColumnRowID</b> will be an index into an array of visible tag groups, rows or columns for "insert", "deleteColumn" or "deleteRow" actions.<br>
+	<b>fieldValues</b> is an object with the specific data field and value pairs changed in the edit.<br>
+	Return an <b>int</b> to tell Drag Drop Grid how to finish the event:<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;Returning <b>FALSE</b> or <b>0</b> will tell Drag Drop Grid NOT to perform the edit. Use this to prevent the change.<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;Returning <b>-1</b> tells Drag Drop Grid to make the default data change as well as reflect it in the grid.<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;Thus by just returning either <b>FALSE (0)</b> or <b>-1</b> you can get in a hook to prevent an edit to enforce a rule as well as post the change to your server. This lets Drag Drop Grid maintain the local data array.<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;However, you might have a few reasons to customize an edit to add additional data changes or insert a specific record number.<br> 
+	&nbsp;&nbsp;&nbsp;&nbsp;Returning <b>TRUE (0)</b> or any number greater than <b>0</b> will tell Drag Drop Grid that you performed the edit and to reflect the change on the grid based on that specific index to the tagData array. Drag Drop Grid will only change the visual grid.<br>
+	<div class="w3-code notranslate w3-text-black">
+	function showExample4() {<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;var testData = [<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{"project":1,"role":"Project Mgr","contractor":"Gunderson"},<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{"project":1,"role":"Designer","contractor":"Olivia"},<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{"project":1,"role":"Installer","contractor":"Marcus"},<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{"project":1,"role":"Installer","contractor":"Joel"},<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{"project":2,"role":"Project Mgr","contractor":"Sanchez"},<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{"project":2,"role":"Designer","contractor":"Brown"},<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{"project":2,"role":"Finisher","contractor":"Abijan"}<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;];<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;var projects = [<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{Value:1,Label:"Sandy Springs"},<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{Value:2,Label:"Calloway"},<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{Value:3,Label:"Duluth"},<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{Value:4,Label:"Marietta"},<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{Value:5,Label:"Athens"}<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;];<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;var contractors = [<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{Value:"Gunderson",Label:"Gunderson",Color:"green","role":"Project Mgr"},<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{Value:"Sanchez",Label:"Sanchez",Color:"green","role":"Project Mgr"},<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{Value:"Olivia",Label:"Olivia",Color:"purple","role":"Designer"},<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{Value:"Brown",Label:"Brown",Color:"purple","role":"Designer"},<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{Value:"Marcus",Label:"Marcus",Color:"brown","role":"Installer"},<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{Value:"Joel",Label:"Joel",Color:"brown","role":"Installer"},<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{Value:"Michael",Label:"Michael",Color:"brown","role":"Installer"},<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{Value:"Abijan",Label:"Abijan",Color:"orange","role":"Finisher"},<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{Value:"Ellen",Label:"Ellen",Color:"orange","role":"Finisher"},<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{Value:"George",Label:"George",Color:"orange","role":"Finisher"}<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;];<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;function showChanges(tag,gridAction,groupColumnRowID,fieldValues) {<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var results = "tag.attrs.id = " + tag.attrs.id + "&lt;br&gt;" +<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"tag.attrs.home_group = " + tag.attrs.home_group + "&lt;br&gt;" +<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"gridAction = " + gridAction + "&lt;br&gt;" +<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"groupColumnRowID = " + (groupColumnRowID == null ? 'NULL' : groupColumnRowID) + "&lt;br&gt;" +<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"fieldValues = " + (fieldValues == null ? 'NULL' : JSON.stringify(fieldValues)) + "&lt;br&gt;";<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;document.getElementById("Example4Results").innerHTML = results;<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return -1;<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;example4grid = new ddGrid("Example4Canvas",dd_overFlowMethods.pages,600,600);<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;var gridSettings = {<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;columnField: "project",<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;columnValueLabelPairs: projects,<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tagColorField: "contractor",<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;colorLabelValuePairs: contractors,<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tagLabelField: "contractor",<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tagSmallLabelField: "role",<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tagWidth: 100,<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tagHeight: 60,<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;showLegend: true,<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;legendTitle: "TEAM",<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;legendTagWidth: 100,<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;legendTagHeight: 30,<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;showLegendCount: true,<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gridDeleteOnDragOff: true,<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gridTitleText: "PROJECT ASSIGNMENTS",<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gridCellGrowth: dd_gridCellGrowthMethods.downOnly,<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gridEditMode: true,<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;postEachGridEdit: true<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;};<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;show("Example4Canvas");<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;show("Example4Output");<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;example4grid.gridEditFunction = showChanges;<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;example4grid.loadGrid(gridSettings,testData);<br>
+	}<br>
+	</div><br>
+	<button class="w3-button w3-blue" onclick="showExample4();">Run Example</button><br>
+	<br>
+</div>
+<div id='Example4Canvas' class="w3-border w3-border-black w3-border-16 w3-half" style="height:600px; display:none;">
+</div>
+<div id='Example4Output' class="w3-border w3-border-black w3-border-16 w3-half w3-container w3-padding" style="display:none";>
+	<h3>gridEditFunction was called with the following values:</h3>
+	<div id="Example4Results"></div>
+</div>
+
+</body>
+<script type="text/javascript">
+	window.oncontextmenu = function () { return false; }
+	function toggle(elementID) {
+		var elements = document.getElementsByClassName("toggled");
+		for (var i=0;i<elements.length;i++) {
+			elements[i].style.display = 'none';
+		}
+		document.getElementById(elementID).style.display = 'inline';
+	}
+	function show(elementID) {
+		document.getElementById(elementID).style.display = 'inline';
+	}
+	function hide(elementID) {
+		document.getElementById(elementID).style.display = 'none';
+	}
+	function showExample1() {
+		var testData = [
+			{"employee":"Joseph","status":"AVAILABLE"},
+			{"employee":"April","status":"VACATION"},
+			{"employee":"George","status":"AVAILABLE"},
+			{"employee":"Sarah","status":"AVAILABLE"},
+			{"employee":"Arnold","status":"SICK"},
+			{"employee":"Michael","status":"VACATION"}			
+		];
+		example1grid = new ddGrid("Example1Canvas",dd_overFlowMethods.grows,600,500);
+		var gridSettings = {
+			columnField: "status",
+			tagLabelField: "employee",
+			tagLabelFloat: "middle",
+			gridTitleText: "Employee Status",
+			gridCellGrowth: dd_gridCellGrowthMethods.downOnly,
+			gridEditMode: true
+		};
+		example1grid.loadGrid(gridSettings,testData);
+	}
+	
+	function showExample2() {
+		var testData = [
+			{"chore":"Do the dishes","assignee":"Joseph","status":false},
+			{"chore":"Take out trash","assignee":"Sarah","status":false},
+			{"chore":"Feed the dog","assignee":"Sarah","status":false},
+			{"chore":"Lock Up","assignee":"Arnold","status":false},
+			{"chore":"Sweep the floor","assignee":"Arnold","status":false},
+			{"chore":"Put food away","assignee":"Michael","status":false}			
+		];
+		var columnSettings = [
+			{Value:false,Label:"NOT DONE"},
+			{Value:true,Label:"DONE"}
+		];
+		example2grid = new ddGrid("Example2Canvas",dd_overFlowMethods.slides,window.innerWidth - 50,500);
+		var gridSettings = {
+			columnField: "status",
+			columnValueLabelPairs: columnSettings,
+			rowField: "assignee",
+			tagRowBound: true,
+			tagLabelField: "chore",
+			tagLabelFloat: "middle",
+			gridTitleText: "Nightly Chores",
+			gridCellGrowth: dd_gridCellGrowthMethods.downOnly,
+			gridEditMode: true
+		};
+		example2grid.loadGrid(gridSettings,testData);
+	}
+	
+	function showExample3() {
+		var testData = [
+			{"day":1,"route":1,"driver":"Gunderson"},
+			{"day":1,"route":2,"driver":"Sanchez"},
+			{"day":1,"route":3,"driver":"Olivia"},
+			{"day":1,"route":4,"driver":"Brown"},
+			{"day":2,"route":2,"driver":"Gunderson"},
+			{"day":2,"route":3,"driver":"Sanchez"},
+			{"day":2,"route":4,"driver":"Olivia"},
+			{"day":3,"route":1,"driver":"Brown"},
+			{"day":3,"route":2,"driver":"Gunderson"},
+			{"day":3,"route":3,"driver":"Sanchez"},
+			{"day":3,"route":4,"driver":"Olivia"},
+			{"day":4,"route":1,"driver":"Brown"},
+			{"day":4,"route":2,"driver":"Ryan"},
+			{"day":4,"route":3,"driver":"Gunderson"},
+			{"day":4,"route":4,"driver":"Sanchez"},
+			{"day":5,"route":1,"driver":"Olivia"},
+			{"day":5,"route":2,"driver":"Brown"},
+			{"day":5,"route":3,"driver":"Ryan"},
+			{"day":5,"route":4,"driver":"Gunderson"}
+		];
+		var days = [
+			{Value:1,Label:"Monday"},
+			{Value:2,Label:"Tuesday"},
+			{Value:3,Label:"Wednesday"},
+			{Value:4,Label:"Thursday"},
+			{Value:5,Label:"Friday"}
+		];
+		var routes = [
+			{Value:1,Label:"KINGS RD"},
+			{Value:2,Label:"LAKESHORE"},
+			{Value:3,Label:"WOODLAND"},			
+			{Value:4,Label:"MAIN ST"}
+		];
+		var drivers = [
+			{Value:"Gunderson",Label:"Gunderson",Color:"green"},
+			{Value:"Sanchez",Label:"Sanchez",Color:"blue"},
+			{Value:"Olivia",Label:"Olivia",Color:"purple"},
+			{Value:"Brown",Label:"Brown",Color:"brown"},
+			{Value:"Ryan",Label:"Ryan",Color:"orange"}
+		];
+		example3grid = new ddGrid("Example3Canvas",dd_overFlowMethods.slides,window.innerWidth - 50,500);
+		var gridSettings = {
+			columnField: "day",
+			columnValueLabelPairs: days,
+			rowField: "route",
+			rowValueLabelPairs: routes,
+			tagColorField: "driver",
+			colorLabelValuePairs: drivers,
+			tagLabelField: "driver",
+			tagLabelFloat: "middle",
+			showLegend: true,
+			legendTitle: "DRIVERS",
+			showLegendCount: true,
+			gridDeleteOnDragOff: true,
+			gridTitleText: "SCHOOL BUS SCHEDULE",
+			gridCellGrowth: dd_gridCellGrowthMethods.downOnly,
+			gridEditMode: true
+		};
+		example3grid.loadGrid(gridSettings,testData);
+	}
+
+	function showExample4() {
+		show("Example4Canvas");
+		show("Example4Output");
+		var testData = [
+			{"project":1,"role":"Project Mgr","contractor":"Gunderson"},
+			{"project":1,"role":"Designer","contractor":"Olivia"},
+			{"project":1,"role":"Installer","contractor":"Marcus"},
+			{"project":1,"role":"Installer","contractor":"Joel"},
+			{"project":2,"role":"Project Mgr","contractor":"Sanchez"},
+			{"project":2,"role":"Designer","contractor":"Brown"},
+			{"project":2,"role":"Finisher","contractor":"Abijan"}
+		];
+		var projects = [
+			{Value:1,Label:"Sandy Springs"},
+			{Value:2,Label:"Calloway"},
+			{Value:3,Label:"Duluth"},
+			{Value:4,Label:"Marietta"},
+			{Value:5,Label:"Athens"}
+		];
+		var contractors = [
+			{Value:"Gunderson",Label:"Gunderson",Color:"green","role":"Project Mgr"},
+			{Value:"Sanchez",Label:"Sanchez",Color:"green","role":"Project Mgr"},
+			{Value:"Olivia",Label:"Olivia",Color:"purple","role":"Designer"},
+			{Value:"Brown",Label:"Brown",Color:"purple","role":"Designer"},
+			{Value:"Marcus",Label:"Marcus",Color:"brown","role":"Installer"},
+			{Value:"Joel",Label:"Joel",Color:"brown","role":"Installer"},
+			{Value:"Michael",Label:"Michael",Color:"brown","role":"Installer"},
+			{Value:"Abijan",Label:"Abijan",Color:"orange","role":"Finisher"},
+			{Value:"Ellen",Label:"Ellen",Color:"orange","role":"Finisher"},
+			{Value:"George",Label:"George",Color:"orange","role":"Finisher"}
+		];
+		function showChanges(tag,gridAction,groupColumnRowID,fieldValues) {
+			var results = "tag.attrs.id = " + tag.attrs.id + "<br>" +
+			"tag.attrs.home_group = " + tag.attrs.home_group + "<br>" +
+			"gridAction = " + gridAction + "<br>" +
+			"groupColumnRowID = " + (groupColumnRowID == null ? 'NULL' : groupColumnRowID) + "<br>" +
+			"fieldValues = " + (fieldValues == null ? 'NULL' : JSON.stringify(fieldValues)) + "<br>";
+			document.getElementById("Example4Results").innerHTML = results;
+			return -1;
+		}
+		example4grid = new ddGrid("Example4Canvas",dd_overFlowMethods.pages,document.getElementById("Example4Canvas").offsetWidth,600);
+		var gridSettings = {
+			columnField: "project",
+			columnValueLabelPairs: projects,
+			tagColorField: "contractor",
+			colorLabelValuePairs: contractors,
+			tagLabelField: "contractor",
+			tagSmallLabelField: "role",
+			tagWidth: 100,
+			tagHeight: 60,
+			showLegend: true,
+			legendTitle: "TEAM",
+			legendTagWidth: 100,
+			legendTagHeight: 30,
+			showLegendCount: true,
+			gridDeleteOnDragOff: true,
+			gridTitleText: "ASSIGNMENTS",
+			gridCellGrowth: dd_gridCellGrowthMethods.downOnly,
+			gridEditMode: true,
+			postEachGridEdit: true
+		};
+		example4grid.gridEditFunction = showChanges;
+		example4grid.loadGrid(gridSettings,testData);
+		
+		//var tagEditMenuOptions = [];
+		//tagEditMenuOptions[0] = {
+		//	label: "DELETE",
+		//	action: function () {example4grid.deleteTag(this.tag);}
+		//};
+		//var tagEditMenu = new ddMenu(example4grid, tagEditMenuOptions);
+		//example4grid.tagEditMenu = function (x,y,dataIndex,tag) {tagEditMenu.show(x,y,dataIndex,tag);};
+		//alternative syntax => example4grid.tagEditMenu = tagEditMenu.show.bind(tagEditMenu);
+	}
+</script>
+</html>
