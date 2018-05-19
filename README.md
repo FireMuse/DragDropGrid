@@ -1,33 +1,13 @@
 # Drag Drop Grid (ddgrid.js)
-[edit](https://github.com/FireMuse/DragDropGrid/edit/master/README.md)
+Drag Drop Grid is an HTML5 visual interface for data best presented and editable on a grid. There's a wide variety of uses for personal or business. It works for both desktop and mobile browsers.
 
+###Libraries
+Konva [Link](https://konvajs.github.io/)
+
+###Examples
 [See Examples](https://firemuse.github.io/DragDropGrid/examples)
 
 
 
-### Markdown
-
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
+[edit](https://github.com/FireMuse/DragDropGrid/edit/master/README.md)
 
