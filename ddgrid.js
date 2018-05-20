@@ -247,7 +247,8 @@ class ddGrid {
 				width: this.stageWidth*10,
 				height: this.stageHeight*2,
 				fill: 'transparent',
-				opacity: 0.3
+				opacity: 0.3,
+				preventDefault: false
 			});			
 			this.tagLayer.add(dragSurface);
 			
