@@ -2,7 +2,8 @@
 <html>
 <head>
 	<title>Drag Drop Grid Examples</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!--meta name="viewport" content="width=device-width, initial-scale=1"-->
+	<meta name="viewport" content="width=480, maximum-scale=1.0, user-scalable=no">
 	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 	<script src="https://cdn.rawgit.com/konvajs/konva/2.0.3/konva.min.js"></script>
 	<script src="ddgrid.js"></script>
@@ -46,14 +47,14 @@
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{"employee":"Arnold","status":"SICK"},<br>
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{"employee":"Michael","status":"VACATION"}<br>		
 	&nbsp;&nbsp;&nbsp;&nbsp;];<br>
-	&nbsp;&nbsp;&nbsp;&nbsp;<code class="w3-codespan">example1grid = new ddGrid("Example1Canvas",dd_overFlowMethods.grows,600,500);</code><br>
+	&nbsp;&nbsp;&nbsp;&nbsp;<code class="w3-codespan">example1grid = new ddGrid("Example1Canvas",dd_overFlowMethods.slides,window.innerWidth - 50,500);</code><br>
 	&nbsp;&nbsp;&nbsp;&nbsp;<code class="w3-codespan">example1grid.loadGrid(gridSettings,testData);</code><br>
 	}<br>
 	</div><br>
 	<button class="w3-button w3-blue" onclick="showExample1();">Run Example</button><br>
 	<br>
 </div>
-<div id='Example1Canvas' class="w3-border w3-border-black w3-border-16" style="width:600px;">
+<div id='Example1Canvas' class="w3-border w3-border-black w3-border-16 w3-rest">
 </div><br>
 <div id="Example2" class="w3-panel toggled w3-green">
 	<h3>Example 2 - Deterministic Grid</h3>
@@ -158,7 +159,7 @@
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{Value:"Brown",Label:"Brown",Color:"brown"},<br>
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{Value:"Ryan",Label:"Ryan",Color:"orange"}<br>
 	&nbsp;&nbsp;&nbsp;&nbsp;];<br>
-	&nbsp;&nbsp;&nbsp;&nbsp;example3grid = new ddGrid("Example3Canvas",dd_overFlowMethods.grows,1200,500);<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;example3grid = new ddGrid("Example3Canvas",dd_overFlowMethods.slides,window.innerWidth - 50,500);<br>
 	&nbsp;&nbsp;&nbsp;&nbsp;var gridSettings = {<br>
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;columnField: "day",<br>
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;columnValueLabelPairs: days,<br>
@@ -245,7 +246,7 @@
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;document.getElementById("Example4Results").innerHTML = results;<br>
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return -1;<br>
 	&nbsp;&nbsp;&nbsp;&nbsp;}<br>
-	&nbsp;&nbsp;&nbsp;&nbsp;example4grid = new ddGrid("Example4Canvas",dd_overFlowMethods.pages,600,600);<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;example4grid = new ddGrid("Example4Canvas",dd_overFlowMethods.pages,document.getElementById("Example4Canvas").offsetWidth,600);<br>
 	&nbsp;&nbsp;&nbsp;&nbsp;var gridSettings = {<br>
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;columnField: "project",<br>
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;columnValueLabelPairs: projects,<br>
@@ -278,7 +279,7 @@
 <div id='Example4Canvas' class="w3-border w3-border-black w3-border-16 w3-half" style="height:600px; display:none;">
 </div>
 <div id='Example4Output' class="w3-border w3-border-black w3-border-16 w3-half w3-container w3-padding" style="display:none";>
-	<h3>gridEditFunction was called with the following values:</h3>
+	<b>gridEditFunction was called with the following values:</b></br>
 	<div id="Example4Results"></div>
 </div>
 
@@ -307,7 +308,7 @@
 			{"employee":"Arnold","status":"SICK"},
 			{"employee":"Michael","status":"VACATION"}			
 		];
-		example1grid = new ddGrid("Example1Canvas",dd_overFlowMethods.grows,600,500);
+		example1grid = new ddGrid("Example1Canvas",dd_overFlowMethods.slides,window.innerWidth - 50,500);
 		var gridSettings = {
 			columnField: "status",
 			tagLabelField: "employee",
